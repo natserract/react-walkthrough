@@ -1,22 +1,38 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React, { useCallback, useEffect } from 'react'
+import { useToastData } from '../../hooks'
+import { get, getAll } from '../../api/API'
+import { findsBy } from '../../utils/helper'
 
 type Props = {}
 
 const Home: React.FC<Props> = () => {
-  return (
-    <>
-      <h2>Home Pages</h2>
+  const [toastData, setToastData] = useToastData()
 
-      <Link to="/album">
-        <button>Go to albums</button>
-      </Link>
+  const fetchData = useCallback(() => {
+    const reqAlbums = get('https://jsonplaceholder.typicode.com/albums')
+    const reqUsers = get('https://jsonplaceholder.typicode.com/users')
+    const reqPhotos = get('https://jsonplaceholder.typicode.com/photos')
 
-      <Link to="/favorite">
-        <button>Go to favorite</button>
-      </Link>
-    </>
-  )
+    getAll([reqAlbums, reqUsers, reqPhotos])
+      .then((data) => {
+        const photosData = findsBy(data[2], data[1], ['id']) 
+        const albumsData = findsBy(data[0], data[1], ['id']) 
+        
+        const result = { 
+          photos: { ...photosData },
+          albums: { ...albumsData }
+        }
+
+        console.log('result', result)
+      })
+    // .catch((error) => {
+    //   setToastData({ error: `Error: ${error.what}`, show: true })
+    // })
+  }, [setToastData])
+
+  useEffect(fetchData, []);
+
+  return <h2>Home Page</h2>
 }
 
 export default Home

@@ -25,12 +25,16 @@ export const get = (route: string) => {
         return;
       }
 
-      // console.log('error', error.response)
-      // return error
-
       return Promise.reject({
         status: error.response!!.status,
         what: error.response!!.statusText,
       })
     })
+}
+
+export const getAll = <T>(values: (T | Promise<T>)[]) => {
+  return Axios.all(values)
+    .then(Axios.spread((...responses) => {
+      return responses
+    }))
 }

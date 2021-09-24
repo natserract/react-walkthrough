@@ -1,9 +1,9 @@
 import { createContext, useCallback, useMemo, useState, createElement, useContext } from 'react'
 
-type Ctx<T> = T | (T | ((a: T) => void))[]
+type Context<T> = T | (T | ((a: T) => void))[]
 
 type ToastData = { error: string | null,  show: boolean }
-const ToastDataCtx = createContext<Ctx<ToastData> | undefined>(undefined)
+const ToastDataCtx = createContext<Context<ToastData> | undefined>(undefined)
 
 const WishlistCtx = createContext<unknown>(undefined)
 
