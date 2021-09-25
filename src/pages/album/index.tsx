@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { useLocation } from 'react-router'
 import { getAll, get } from '../../api/API'
-import { useToastData } from '../../hooks'
+import { useToastData, useUsersData } from '../../hooks'
 
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
@@ -16,6 +16,8 @@ import ImageListItemBar from '@material-ui/core/ImageListItemBar';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import CommentsDialog from './dialog'
+import { UsersState } from '../../store/State';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 const useStyles = makeStyles(styles);
 
@@ -23,11 +25,12 @@ const Album: React.FC = () => {
   const classes = useStyles()
   const history = useHistory()
   const { state } = useLocation()
-  const [toastData, setToastData] = useToastData()
+  const [, setToastData] = useToastData()
+  const [usersData, setUsersData] = useUsersData()
 
   const [dataAlbum, setDataAlbum] = useState({})
   const [dataPhotos, setDataPhotos] = useState<any[]>([])
-  const [openDialog, setOpenDialog] = useState(true);
+  const [openDialog, setOpenDialog] = useState(false);
 
   const fetchAlbum = useCallback(() => {
     const { albumId } = state
@@ -53,9 +56,17 @@ const Album: React.FC = () => {
 
   useEffect(() => console.log('data albums', dataAlbum, dataPhotos), [dataAlbum, dataPhotos])
 
-  const handleClickDialog = useCallback(() => {
+  const handleClickComments = useCallback(() => {
     setOpenDialog(true)
   }, [])
+
+  const handleClickFavorite = useCallback((photoId: string) => () => {
+    const photos = dataPhotos.find(v => v.id === photoId)
+    setUsersData({
+      data: photos,
+      id: photoId
+    })
+  }, [dataPhotos, setUsersData])
 
   return (
     <Container component="section" maxWidth="lg" className={classes.root}>
@@ -70,17 +81,22 @@ const Album: React.FC = () => {
         <ImageList gap={10}>
           {dataPhotos.map((photo, index) => (
             <ImageListItem key={index}>
-              <img src={photo.url} alt={photo.title} />
+              <img src={photo.url} alt={photo?.title} />
+
               <ImageListItemBar
-                title={photo.title}
+                title={photo?.title}
                 position='bottom'
                 actionIcon={
                   <>
-                    <Button color='inherit' className={classes.btnComment} onClick={handleClickDialog}>
+                    <Button color='inherit' className={classes.btnComment} onClick={handleClickComments}>
                       Comments
                     </Button>
-                    <IconButton aria-label={`star ${photo.title}`} className={classes.icon}>
-                      <FavoriteBorderIcon />
+                    <IconButton
+                      aria-label={`star ${photo?.title}`}
+                      className={classes.icon}
+                      onClick={handleClickFavorite(photo?.id)}
+                    >
+                      {!!usersData.favorites.find(v => v.id === photo?.id) ? <FavoriteIcon /> : <FavoriteBorderIcon /> }
                     </IconButton>
                   </>
                 }

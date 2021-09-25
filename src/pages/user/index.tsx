@@ -101,7 +101,7 @@ const User: React.FC = () => {
             <Grid item xs={12} key={`list-${albumId}-${index}`}>
               <div className={classes.card}>
                 <div
-                  onClick={() => handleRouteChange(`/${dataUser?.username}/album/${removeWhiteSpace(title)}`, { albumId })}
+                  onClick={() => handleRouteChange(`/${dataUser?.username}/album/${removeWhiteSpace(title)}`, { albumId, userId })}
                   className={classes.cardInner}>
                   <Typography variant="h4" component="h3" className={classes.title} >
                     {title}
@@ -110,7 +110,7 @@ const User: React.FC = () => {
                     Discover Tokyo like you never have before.
                     </Typography>
                 </div>
-                <IconButton onClick={() => handleRouteChange(`/${dataUser?.username}/album/${removeWhiteSpace(title)}`, { albumId })} className={classes.wishlist} color="inherit" aria-label="upload picture" component="span">
+                <IconButton onClick={() => handleRouteChange(`/${dataUser?.username}/album/${removeWhiteSpace(title)}`, { albumId, userId })} className={classes.wishlist} color="inherit" aria-label="upload picture" component="span">
                   <FavoriteBorderIcon fontSize="large" />
                 </IconButton>
               </div>

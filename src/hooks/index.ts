@@ -1,6 +1,6 @@
 import {
   useToastData,
-  useWishlistData
+  useUsersData
  } from '../store/configureStore'
 
- export { useToastData, useWishlistData }
+ export { useToastData, useUsersData }

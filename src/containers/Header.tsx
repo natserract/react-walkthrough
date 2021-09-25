@@ -1,8 +1,10 @@
-import { AppBar, Toolbar, Typography,  makeStyles, Tooltip } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { AppBar, Toolbar, Typography, makeStyles, Tooltip } from '@material-ui/core';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import Button from '@material-ui/core/Button';
-import React from 'react';
 import { Link } from 'react-router-dom'
+import { useUsersData } from '../hooks'
+import Badge from '@material-ui/core/Badge';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,25 +15,31 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    textDecoration: 'none'
+    textDecoration: 'none',
+    paddingTop: 15
   },
 }));
 
 const Header: React.FC = (props) => {
   const classes = useStyles();
+  const [usersData,] = useUsersData()
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
+  const isEmpty = (data) => data.length === 0
+
+  useEffect(() => console.log('usersData new', usersData), [usersData])
+
   return (
     <AppBar position="static" color="transparent">
       <Toolbar>
         <Link to="/" className={classes.title}>
-          <Typography variant="h4">
+          <Typography variant="h3">
             <b>Up.</b>
           </Typography>
         </Link>
@@ -43,14 +51,21 @@ const Header: React.FC = (props) => {
               color="inherit"
               style={{ textTransform: 'capitalize' }}
             >
-              <FavoriteBorderIcon />
-              <Typography 
-                variant="subtitle1" 
-                component="span" 
-                style={{ paddingLeft: 5 }}
+              <Badge 
+                badgeContent={usersData.favorites.length} 
+                invisible={isEmpty(usersData.favorites)} 
+                color="secondary" 
+                variant="dot"
               >
-                 My Favorite
+                <FavoriteBorderIcon />
+                <Typography
+                  variant="subtitle1"
+                  component="span"
+                  style={{ paddingLeft: 5 }}
+                >
+                  My Favorite
               </Typography>
+              </Badge>
             </Button>
           </Tooltip>
         </div>
