@@ -15,6 +15,7 @@ import ImageListItem from '@material-ui/core/ImageListItem';
 import ImageListItemBar from '@material-ui/core/ImageListItemBar';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import CommentsDialog from './dialog'
 
 const useStyles = makeStyles(styles);
 
@@ -26,6 +27,7 @@ const Album: React.FC = () => {
 
   const [dataAlbum, setDataAlbum] = useState({})
   const [dataPhotos, setDataPhotos] = useState<any[]>([])
+  const [openDialog, setOpenDialog] = useState(true);
 
   const fetchAlbum = useCallback(() => {
     const { albumId } = state
@@ -51,6 +53,10 @@ const Album: React.FC = () => {
 
   useEffect(() => console.log('data albums', dataAlbum, dataPhotos), [dataAlbum, dataPhotos])
 
+  const handleClickDialog = useCallback(() => {
+    setOpenDialog(true)
+  }, [])
+
   return (
     <Container component="section" maxWidth="lg" className={classes.root}>
       <Grid container direction="column" className={classes.gridTitle}>
@@ -70,7 +76,7 @@ const Album: React.FC = () => {
                 position='bottom'
                 actionIcon={
                   <>
-                    <Button color='inherit' className={classes.btnComment}>
+                    <Button color='inherit' className={classes.btnComment} onClick={handleClickDialog}>
                       Comments
                     </Button>
                     <IconButton aria-label={`star ${photo.title}`} className={classes.icon}>
@@ -84,6 +90,11 @@ const Album: React.FC = () => {
           ))}
         </ImageList>
       </div>
+
+      <CommentsDialog
+        openDialog={openDialog}
+        setOpenDialog={setOpenDialog}
+      />
     </Container>
   )
 }

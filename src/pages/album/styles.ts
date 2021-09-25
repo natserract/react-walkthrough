@@ -24,5 +24,22 @@ export default (theme: Theme) => createStyles({
   },
   gridTitle: {
     paddingBottom: 25
+  },
+  commentsContainer: {
+    paddingTop: 80,
+    paddingBottom: 20
+  },
+  appBarComment: {
+    top: 'auto', 
+    bottom: 0,
+    padding: '26px 20px !important',
+    background: '#fff'
+  },
+  commentInput: {
+    width: '100%',
+  },
+  btnSubmit: {
+    maxWidth: 150,
+    margin: '10px 0'
   }
 })

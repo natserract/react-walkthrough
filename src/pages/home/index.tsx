@@ -84,7 +84,7 @@ const Home: React.FC = () => {
                   </Typography>
                   <Typography className={classes.featureList}>
                     Discover Tokyo like you never have before.
-              </Typography>
+                  </Typography>
                 </div>
                 <IconButton onClick={() => handleRouteChange(`/${userName}/album/${removeWhiteSpace(title)}`, { albumId })} className={classes.wishlist} color="inherit" aria-label="upload picture" component="span">
                   <FavoriteBorderIcon fontSize="large" />
