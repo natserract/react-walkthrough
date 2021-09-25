@@ -60,24 +60,26 @@ const Home: React.FC = () => {
     history.push(to, { ...state })
   }
 
+  const handleClick = (to: string) => history.push(to)
+
   if (loading) return <FullscreenLoading />
 
   return (
     <Container component="section" maxWidth="lg" className={classes.root}>
       <Grid container spacing={3} alignItems="stretch">
-        {data?.users.map(({ id, name, username }, index) => {
+        {data?.users.map(({ id, name, username }) => {
           const userName = username.toLowerCase()
           const albums = data?.albums.filter(v => v.userId === id)
 
           return albums.map(({ userId, id: albumId, title }, index) => (
             <Grid item xs={12} sm={4} key={`list-${albumId}-${index}`}>
               <div className={classes.card}>
-                <Button onClick={() => history.push(`/user/${userName}`)} className={classes.btnUser}>
+                <Button onClick={() => handleClick(`/user/${userName}`)} className={classes.btnUser}>
                   <Typography component="span">{name}</Typography>
                 </Button>
 
                 <div
-                  onClick={() => handleRouteChange(`/${userName}/album/${removeWhiteSpace(title)}`, { userId, albumId })}
+                  onClick={() => handleRouteChange(`/${userName}/album/${removeWhiteSpace(title)}`, { albumId })}
                   className={classes.cardInner}>
                   <Typography variant="h4" component="h3" className={classes.title} >
                     {title}
@@ -86,7 +88,7 @@ const Home: React.FC = () => {
                     Discover Tokyo like you never have before.
                   </Typography>
                 </div>
-                <IconButton className={classes.wishlist} color="inherit" aria-label="upload picture" component="span">
+                <IconButton onClick={() => handleRouteChange(`/${userName}/album/${removeWhiteSpace(title)}`, { albumId })} className={classes.wishlist} color="inherit" aria-label="upload picture" component="span">
                   <FavoriteBorderIcon fontSize="large" />
                 </IconButton>
               </div>

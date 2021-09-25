@@ -2,6 +2,7 @@ import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, makeStyles, To
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import Button from '@material-ui/core/Button';
 import React from 'react';
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -12,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    textDecoration: 'none'
   },
 }));
 
@@ -28,18 +30,27 @@ const Header: React.FC = (props) => {
   return (
     <AppBar position="static" color="transparent">
       <Toolbar>
-        <Typography variant="h5" className={classes.title}>
-          <b>Projects</b>
-        </Typography>
+        <Link to="/" className={classes.title}>
+          <Typography variant="h5">
+            <b>Projects</b>
+          </Typography>
+        </Link>
 
         <div>
           <Tooltip title="Favorite">
             <Button
               onClick={handleMenu}
               color="inherit"
+              style={{ textTransform: 'capitalize' }}
             >
-              <FavoriteBorderIcon /> 
-              <span style={{ paddingLeft: 5 }}>Favorite</span>
+              <FavoriteBorderIcon />
+              <Typography 
+                variant="subtitle1" 
+                component="span" 
+                style={{ paddingLeft: 5 }}
+              >
+                 My Favorite
+              </Typography>
             </Button>
           </Tooltip>
         </div>
