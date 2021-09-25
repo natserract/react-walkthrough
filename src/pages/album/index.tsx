@@ -54,7 +54,7 @@ const Album: React.FC = () => {
   return (
     <Container component="section" maxWidth="lg" className={classes.root}>
       <Grid container direction="column" className={classes.gridTitle}>
-        <Typography variant="subtitle1">Album</Typography>
+        <Typography variant="overline">Album</Typography>
         <Typography variant="h3" component="h2">
           Quidem Molestiae Enim
         </Typography>
@@ -71,7 +71,7 @@ const Album: React.FC = () => {
                 actionIcon={
                   <>
                     <Button color='inherit' className={classes.btnComment}>
-                      Add Comment
+                      Comments
                     </Button>
                     <IconButton aria-label={`star ${photo.title}`} className={classes.icon}>
                       <FavoriteBorderIcon />

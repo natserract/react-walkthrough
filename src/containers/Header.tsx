@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, IconButton, Typography, Menu, MenuItem, makeStyles, Tooltip } from '@material-ui/core';
+import { AppBar, Toolbar, Typography,  makeStyles, Tooltip } from '@material-ui/core';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import Button from '@material-ui/core/Button';
 import React from 'react';

@@ -4,19 +4,26 @@ import { get, getAll } from '../../api/API'
 import { useToastData } from '../../hooks'
 import styles from './styles'
 import { makeStyles } from '@material-ui/core';
+import { removeWhiteSpace } from '../../utils/helper'
 
 import Grid from '@material-ui/core/Grid';
 import Typography from "@material-ui/core/Typography";
-import Avatar from '@material-ui/core/Avatar';
-
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import Container from '@material-ui/core/Container';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(styles);
 
 const User: React.FC = () => {
   const classes = useStyles()
+  const history = useHistory()
   const { state } = useLocation()
-  const [toastData, setToastData] = useToastData()
+  const [, setToastData] = useToastData()
 
   const [dataUser, setDataUser] = useState<Record<string, any>>()
   const [dataAlbums, setDataAlbums] = useState<any[]>([])
@@ -43,25 +50,73 @@ const User: React.FC = () => {
   useEffect(fetchAlbum, [])
 
   useEffect(() => {
-    console.log('dataUser', dataUser)
-  }, [dataUser])
+    console.log('dataAlbums', dataAlbums)
+  }, [dataAlbums])
+
+  const handleRouteChange = (to: string, state = {}) => {
+    history.push(to, { ...state })
+  }
 
   return (
     <Container component="section" maxWidth="lg" className={classes.root}>
-      <Grid justifyContent="space-between" direction="row" container spacing={2} className={classes.profile}>
-        <Grid item md={3}>
-          <Avatar className={classes.avatar}> </Avatar>
-        </Grid>
-        <Grid item md={9}>
-          <Typography variant="h4" component="h3">{dataUser?.name}</Typography>
-          <Typography variant="subtitle2">
-            Desc
-          </Typography>
+      <Grid justifyContent="space-between" direction="row" container className={classes.profile}>
+        <Grid item>
+          <div className={classes.spacingHorizontal}>
+            <Typography variant="overline" gutterBottom>User Profile</Typography>
+            <Typography variant="h4" component="h3">{dataUser?.name}</Typography>
+          </div>
+
+          <List>
+            <ListItem>
+              <ListItemText primary="Email" secondary={`${dataUser?.email}`} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Phone" secondary={`${dataUser?.phone}`} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Company Name" secondary={`${dataUser?.company?.name}`} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Address" secondary={`${dataUser?.address?.street}, ${dataUser?.address?.city}`} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="Zip Code" secondary={`${dataUser?.address?.zipcode}`} />
+            </ListItem>
+          </List>
         </Grid>
       </Grid>
 
-      <Grid container direction="column" alignItems="center">
-        <Typography variant="h4" component="h4" align="center">Collection Albums</Typography>
+      <Grid container>
+        <Grid container direction="column" alignItems="flex-start">
+          <div className={classes.spacingHorizontal}>
+            <Typography variant="overline" gutterBottom>Collection</Typography>
+            <Typography variant="h4" gutterBottom component="h3">
+              Albums
+            </Typography>
+          </div>
+        </Grid>
+
+        <Grid container spacing={2} alignItems="stretch" className={classes.spacingHorizontal}>
+          {dataAlbums.map(({ userId, id: albumId, title }, index) => (
+            <Grid item xs={12} key={`list-${albumId}-${index}`}>
+              <div className={classes.card}>
+                <div
+                  onClick={() => handleRouteChange(`/${dataUser?.username}/album/${removeWhiteSpace(title)}`, { albumId })}
+                  className={classes.cardInner}>
+                  <Typography variant="h4" component="h3" className={classes.title} >
+                    {title}
+                  </Typography>
+                  <Typography className={classes.featureList}>
+                    Discover Tokyo like you never have before.
+                    </Typography>
+                </div>
+                <IconButton onClick={() => handleRouteChange(`/${dataUser?.username}/album/${removeWhiteSpace(title)}`, { albumId })} className={classes.wishlist} color="inherit" aria-label="upload picture" component="span">
+                  <FavoriteBorderIcon fontSize="large" />
+                </IconButton>
+              </div>
+            </Grid>
+          ))}
+        </Grid>
       </Grid>
     </Container>
   )

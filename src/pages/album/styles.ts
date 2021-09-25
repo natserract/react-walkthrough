@@ -5,7 +5,7 @@ import {
 
 export default (theme: Theme) => createStyles({
   root: {
-    padding: theme.spacing(12, 4),
+    padding: theme.spacing(7, 4),
   },
   titleBar: {
     background:

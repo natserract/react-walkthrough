@@ -18,3 +18,7 @@ a {
   line-height: 1.2em;
   margin-bottom: 10px;
 }
+
+.MuiAppBar-root.MuiAppBar-colorTransparent {
+  box-shadow: none;
+}
