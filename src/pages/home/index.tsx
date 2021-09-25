@@ -1,38 +1,108 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useToastData } from '../../hooks'
 import { get, getAll } from '../../api/API'
-import { findsBy } from '../../utils/helper'
+import { findsBy, removeWhiteSpace } from '../../utils/helper'
 
-type Props = {}
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import IconButton from '@material-ui/core/IconButton';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core';
+import styles from './styles'
+import { Link, useHistory } from 'react-router-dom';
+import FullscreenLoading from '../../components/loading';
 
-const Home: React.FC<Props> = () => {
+type FieldState = {
+  albums: any[],
+  users: any[]
+}
+
+const useStyles = makeStyles(styles);
+
+const Home: React.FC = () => {
+  const classes = useStyles()
+  const history = useHistory()
   const [toastData, setToastData] = useToastData()
+
+  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState<FieldState>()
 
   const fetchData = useCallback(() => {
     const reqAlbums = get('https://jsonplaceholder.typicode.com/albums')
     const reqUsers = get('https://jsonplaceholder.typicode.com/users')
-    const reqPhotos = get('https://jsonplaceholder.typicode.com/photos')
 
-    getAll([reqAlbums, reqUsers, reqPhotos])
+    getAll([reqAlbums, reqUsers])
       .then((data) => {
-        const photosData = findsBy(data[2], data[1], ['id']) 
-        const albumsData = findsBy(data[0], data[1], ['id']) 
-        
-        const result = { 
-          photos: { ...photosData },
-          albums: { ...albumsData }
-        }
+        const usersData = data[1]
+        const albumsData = findsBy(data[0], usersData, ['userId'])
 
-        console.log('result', result)
+        // using the query in the url it takes less to load up because it doesn't have to load up all the items
+        // https://jsonplaceholder.typicode.com/photos?albumId=1
+        //const reqPhotos = get('https://jsonplaceholder.typicode.com/photos')
+        // const photo = findsBy(data[2], data[0], ['albumId'])!!
+
+        setData({
+          albums: albumsData!!,
+          users: usersData
+        })
+        setLoading(false)
       })
-    // .catch((error) => {
-    //   setToastData({ error: `Error: ${error.what}`, show: true })
-    // })
+      .catch((error) => {
+        setToastData({ error: `Error: ${error.what}`, show: true })
+        setLoading(true)
+      })
   }, [setToastData])
 
   useEffect(fetchData, []);
 
-  return <h2>Home Page</h2>
+  useEffect(() => {
+    console.log('data', data)
+  }, [data])
+
+  const handleRouteChange = (to: string, userId: string) => {
+    history.push(to, {
+      userId
+    })
+  }
+
+  if (loading) return <FullscreenLoading />
+
+  return (
+    <Container component="section" maxWidth="lg" className={classes.root}>
+      <Grid container spacing={3} alignItems="stretch">
+        {data?.users.map(({ id, name, username }, index) => {
+          const userName = username.toLowerCase()
+          const albums = data?.albums.filter(v => v.userId === id)
+
+          return albums.map(({ userId, id, title }, index) => (
+            <Grid item xs={12} sm={4} key={`list-${id}-${index}`}>
+              <div className={classes.card}>
+                <Button onClick={() => history.push(`/user/${userName}`)} className={classes.btnUser}>
+                  <Typography component="span">{name}</Typography>
+                </Button>
+                <div
+                  onClick={() => handleRouteChange(`/${userName}/album/${removeWhiteSpace(title)}`, userId)}
+                  className={classes.cardInner}
+                >
+                  <Typography variant="h4" component="h3" className={classes.title} >
+                    {title}
+                  </Typography>
+                  <Typography className={classes.featureList}>
+                    Discover Tokyo like you never have before.
+                  </Typography>
+                </div>
+                <IconButton className={classes.wishlist} color="inherit" aria-label="upload picture" component="span">
+                  <FavoriteBorderIcon fontSize="large" />
+                </IconButton>
+              </div>
+            </Grid>
+          ))
+        })}
+      </Grid>
+    </Container>
+  )
 }
 
 export default Home

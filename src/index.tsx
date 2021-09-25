@@ -6,13 +6,13 @@ import Routes from './Routes';
 import * as serviceWorker from './serviceWorker';
 import { AllContextProvider } from './store/configureStore'
 import Toast from './components/toast';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import FullscreenLoading from './components/loading';
 
 ReactDOM.render(
   <AllContextProvider>
     <BrowserRouter>
       <Toast />
-      <React.Suspense fallback={<CircularProgress />}>
+      <React.Suspense fallback={<FullscreenLoading />}>
         <Routes />
       </React.Suspense>
     </BrowserRouter>

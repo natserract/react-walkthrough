@@ -16,7 +16,7 @@ const routes: {
     exact: true
   },
   {
-    path: '/album',
+    path: '/:username/album/:albumname',
     component: React.lazy(() => import('./pages/album'))
   },
   {
@@ -24,7 +24,7 @@ const routes: {
     component: React.lazy(() => import('./pages/favorite'))
   },
   {
-    path: '/user',
+    path: '/user/:username',
     component: React.lazy(() => import('./pages/user'))
   },
   {

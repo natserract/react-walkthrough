@@ -19,3 +19,5 @@ export const findsBy = (
 
   if (result.length) return result
 }
+
+export const removeWhiteSpace = (str: string, char = '-') => str.replace(/\s+/g, char)

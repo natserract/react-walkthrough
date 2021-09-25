@@ -1,19 +1,17 @@
+import { makeStyles } from '@material-ui/core';
 import React from 'react';
+import Header from './Header';
 
-import styles from './Layout.module.scss';
+import styles from './Layout.styles'
+const useStyles = makeStyles(styles);
 
 const Layout: React.FC = (props) => {
-
+  const classes = useStyles()
+  
   return (
     <React.Fragment>
+      <Header />
       {props.children}
-      {/* <Header />
-      <Content className={styles.wrapper}>
-        <div className={styles.content}>{props.children}</div>
-      </Content>
-      <Footer style={{ textAlign: 'center' }}>
-        &#169;Anekonnect {currentDate.getFullYear()}. All Rights Reserved
-      </Footer> */}
     </React.Fragment>
   );
 };
