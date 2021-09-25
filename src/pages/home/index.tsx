@@ -1,17 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useToastData } from '../../hooks'
 import { get, getAll } from '../../api/API'
-import { findsBy, removeWhiteSpace } from '../../utils/helper'
+import { findsBy } from '../../utils/helper'
 
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import IconButton from '@material-ui/core/IconButton';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core';
 import styles from './styles'
-import { Link, useHistory } from 'react-router-dom';
+import AlbumsGrid from '../../components/albums';
 import FullscreenLoading from '../../components/loading';
 
 type FieldState = {
@@ -23,8 +19,7 @@ const useStyles = makeStyles(styles);
 
 const Home: React.FC = () => {
   const classes = useStyles()
-  const history = useHistory()
-  const [toastData, setToastData] = useToastData()
+  const [, setToastData] = useToastData()
 
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState<FieldState>()
@@ -56,46 +51,13 @@ const Home: React.FC = () => {
     console.log('data', data)
   }, [data])
 
-  const handleRouteChange = (to: string, state = {}) => {
-    history.push(to, { ...state })
-  }
-
-  const handleClick = (to: string) => history.push(to)
-
   if (loading) return <FullscreenLoading />
 
   return (
     <Container component="section" maxWidth="lg" className={classes.root}>
-      <Grid container spacing={3} alignItems="stretch">
-        {data?.users.map(({ id, name, username }) => {
-          const userName = username.toLowerCase()
-          const albums = data?.albums.filter(v => v.userId === id)
-
-          return albums.map(({ userId, id: albumId, title }, index) => (
-            <Grid item xs={12} sm={4} key={`list-${albumId}-${index}`}>
-              <div className={classes.card}>
-                <Button onClick={() => handleClick(`/user/${userName}`)} className={classes.btnUser}>
-                  <Typography component="span">{name}</Typography>
-                </Button>
-
-                <div
-                  onClick={() => handleRouteChange(`/${userName}/album/${removeWhiteSpace(title)}`, { albumId })}
-                  className={classes.cardInner}>
-                  <Typography variant="h4" component="h3" className={classes.title} >
-                    {title}
-                  </Typography>
-                  <Typography className={classes.featureList}>
-                    Discover Tokyo like you never have before.
-                  </Typography>
-                </div>
-                <IconButton onClick={() => handleRouteChange(`/${userName}/album/${removeWhiteSpace(title)}`, { albumId })} className={classes.wishlist} color="inherit" aria-label="upload picture" component="span">
-                  <FavoriteBorderIcon fontSize="large" />
-                </IconButton>
-              </div>
-            </Grid>
-          ))
-        })}
-      </Grid>
+      <Grid container spacing={3} alignItems="stretch" children={
+        <AlbumsGrid data={data!!} />
+      }/>
     </Container>
   )
 }

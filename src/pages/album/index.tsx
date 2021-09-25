@@ -31,7 +31,7 @@ const Album: React.FC = () => {
     const { albumId } = state
 
     // Using the query in the url it takes less to load up because it doesn't have to load up all the items
-    const reqAlbums = get(`https://jsonplaceholder.typicode.com/albums?id=${albumId}`)
+    const reqAlbums = get(`https://jsonplaceholder.typicode.com/albums/${albumId}`)
     const reqPhotos = get(`https://jsonplaceholder.typicode.com/photos?albumId=${albumId}`)
 
     getAll([reqAlbums, reqPhotos])
@@ -39,7 +39,7 @@ const Album: React.FC = () => {
         const album = data[0]
         const photos = data[1]
 
-        setDataAlbum(album.find(v => v.id === albumId))
+        setDataAlbum(album)
         setDataPhotos(photos)
       })
       .catch((error) => {
@@ -84,36 +84,6 @@ const Album: React.FC = () => {
           ))}
         </ImageList>
       </div>
-
-      <Grid container spacing={3} alignItems="stretch">
-        {/* {data?.albums.map(({ userId, id, title }) => {
-          const photos = data?.photos.filter(v => v.albumId === id)
-
-          // return photos.map(({ albumId, id: photoId, thumbnailUrl, url }, index) => (
-          //   <Grid item xs={12} sm={4} key={`list-${albumId}-${index}`}>
-          //     <div className={classes.card}>
-          //       <Button onClick={() => history.push(`/user/${userName}`)} className={classes.btnUser}>
-          //         <Typography component="span">{name}</Typography>
-          //       </Button>
-
-          //       <div
-          //         onClick={() => handleRouteChange(`/${userName}/album/${removeWhiteSpace(title)}`, { userId, albumId })}
-          //         className={classes.cardInner}>
-          //         <Typography variant="h4" component="h3" className={classes.title} >
-          //           {title}
-          //         </Typography>
-          //         <Typography className={classes.featureList}>
-          //           Discover Tokyo like you never have before.
-          //       </Typography>
-          //       </div>
-          //       <IconButton className={classes.wishlist} color="inherit" aria-label="upload picture" component="span">
-          //         <FavoriteBorderIcon fontSize="large" />
-          //       </IconButton>
-          //     </div>
-          //   </Grid>
-          // ))
-        })} */}
-      </Grid>
     </Container>
   )
 }

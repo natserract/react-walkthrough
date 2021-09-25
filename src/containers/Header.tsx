@@ -31,8 +31,8 @@ const Header: React.FC = (props) => {
     <AppBar position="static" color="transparent">
       <Toolbar>
         <Link to="/" className={classes.title}>
-          <Typography variant="h5">
-            <b>Projects</b>
+          <Typography variant="h4">
+            <b>Up.</b>
           </Typography>
         </Link>
 
