@@ -1,25 +1,31 @@
 import React, { useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router'
-import { get } from '../../api/API'
+import { getAll, get } from '../../api/API'
 import { useToastData } from '../../hooks'
-type Props = {}
 
-const Album: React.FC<Props> = () => {
+const Album: React.FC = () => {
   const { state } = useLocation()
-  const { userId } = state;
   const [toastData, setToastData] = useToastData()
 
   const fetchAlbum = useCallback(() => {
-    const reqAlbum = `https://jsonplaceholder.typicode.com/albums?userId=${userId}`
+    const { userId, albumId } = state
 
-    get(reqAlbum)
+    // Using the query in the url it takes less to load up because it doesn't have to load up all the items
+    const reqAlbums =  get(`https://jsonplaceholder.typicode.com/albums?userId=${userId}`)
+    const reqPhotos = get(`https://jsonplaceholder.typicode.com/photos?albumId=${albumId}`)
+
+    getAll([reqAlbums, reqPhotos])
       .then((data) => {
-        console.log('Album data', data, userId)
+        const result = {
+          albums: data[0],
+          photos: data[1]
+        }
+        console.log('Alls data', result)
       })
       .catch((error) => {
         setToastData({ error: `Error: ${error.what}`, show: true })
       })
-  }, [userId, setToastData])
+  }, [state, setToastData])
 
   useEffect(fetchAlbum, [])
 

@@ -38,11 +38,6 @@ const Home: React.FC = () => {
         const usersData = data[1]
         const albumsData = findsBy(data[0], usersData, ['userId'])
 
-        // using the query in the url it takes less to load up because it doesn't have to load up all the items
-        // https://jsonplaceholder.typicode.com/photos?albumId=1
-        //const reqPhotos = get('https://jsonplaceholder.typicode.com/photos')
-        // const photo = findsBy(data[2], data[0], ['albumId'])!!
-
         setData({
           albums: albumsData!!,
           users: usersData
@@ -61,10 +56,8 @@ const Home: React.FC = () => {
     console.log('data', data)
   }, [data])
 
-  const handleRouteChange = (to: string, userId: string) => {
-    history.push(to, {
-      userId
-    })
+  const handleRouteChange = (to: string, state = {}) => {
+    history.push(to, { ...state })
   }
 
   if (loading) return <FullscreenLoading />
@@ -76,16 +69,16 @@ const Home: React.FC = () => {
           const userName = username.toLowerCase()
           const albums = data?.albums.filter(v => v.userId === id)
 
-          return albums.map(({ userId, id, title }, index) => (
-            <Grid item xs={12} sm={4} key={`list-${id}-${index}`}>
+          return albums.map(({ userId, id: albumId, title }, index) => (
+            <Grid item xs={12} sm={4} key={`list-${albumId}-${index}`}>
               <div className={classes.card}>
                 <Button onClick={() => history.push(`/user/${userName}`)} className={classes.btnUser}>
                   <Typography component="span">{name}</Typography>
                 </Button>
+
                 <div
-                  onClick={() => handleRouteChange(`/${userName}/album/${removeWhiteSpace(title)}`, userId)}
-                  className={classes.cardInner}
-                >
+                  onClick={() => handleRouteChange(`/${userName}/album/${removeWhiteSpace(title)}`, { userId, albumId })}
+                  className={classes.cardInner}>
                   <Typography variant="h4" component="h3" className={classes.title} >
                     {title}
                   </Typography>
