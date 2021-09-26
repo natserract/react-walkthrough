@@ -1,4 +1,11 @@
 
 export type UsersState = {
-  favorites: any[],
+  favorites: {
+    [albumId: string]: {
+      items: {
+        [photoId: string]: any
+      }
+      [x: string]: any,
+    }
+  },
 }

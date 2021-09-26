@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router'
 import { getAll, get } from '../../api/API'
 import { useToastData, useUsersData } from '../../hooks'
@@ -8,7 +8,6 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import styles from './styles'
-import { useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import ImageList from '@material-ui/core/ImageList';
 import ImageListItem from '@material-ui/core/ImageListItem';
@@ -16,14 +15,12 @@ import ImageListItemBar from '@material-ui/core/ImageListItemBar';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import CommentsDialog from './dialog'
-import { UsersState } from '../../store/State';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
 const useStyles = makeStyles(styles);
 
 const Album: React.FC = () => {
   const classes = useStyles()
-  const history = useHistory()
   const { state } = useLocation()
   const [, setToastData] = useToastData()
   const [usersData, setUsersData] = useUsersData()
@@ -61,12 +58,22 @@ const Album: React.FC = () => {
   }, [])
 
   const handleClickFavorite = useCallback((photoId: string) => () => {
+    const { albumId } = state
     const photos = dataPhotos.find(v => v.id === photoId)
+
     setUsersData({
-      data: photos,
-      id: photoId
+      data: {
+        photos,
+        albums: dataAlbum
+      },
+      albumId,
+      photoId
     })
-  }, [dataPhotos, setUsersData])
+  }, [state, dataPhotos, dataAlbum, setUsersData])
+
+  useEffect(() => {
+    console.log('usersData', usersData)
+  }, [usersData])
 
   return (
     <Container component="section" maxWidth="lg" className={classes.root}>
@@ -96,7 +103,7 @@ const Album: React.FC = () => {
                       className={classes.icon}
                       onClick={handleClickFavorite(photo?.id)}
                     >
-                      {!!usersData.favorites.find(v => v.id === photo?.id) ? <FavoriteIcon /> : <FavoriteBorderIcon /> }
+                      {usersData.favorites[state.albumId] && !!usersData.favorites[state.albumId].items.find(v => v.id === photo?.id) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                     </IconButton>
                   </>
                 }

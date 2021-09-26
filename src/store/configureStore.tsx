@@ -4,7 +4,7 @@ import { UsersState } from './State'
 type Context<T> = T | (T | ((a: T) => void))[]
 type Dispatch<T> = React.Dispatch<React.SetStateAction<T[]>>
 
-type ToastData = { error: string | null,  show: boolean }
+type ToastData = { error: string | null, show: boolean }
 const ToastDataCtx = createContext<Context<ToastData> | undefined>(undefined)
 
 const UsersCtx = createContext<unknown>(undefined)
@@ -28,31 +28,37 @@ export const useUsersData = () => useContext(UsersCtx) as [UsersState, Function]
 
 export const UsersProvider = ({ children }) => {
   const [usersData, setUsersData] = useState<UsersState>({
-    favorites: []
+    favorites: {}
   });
 
   const usersRef = useRef<UsersState>({
-    favorites: []
+    favorites: {}
   })
+  const itemsRef = useRef<any[]>([])
 
-  const setValue = useCallback(({ data, id }) => {
-    const { favorites } = usersRef.current
-    const isToggled = favorites.includes(data)
+  const setValue = useCallback(({ data, albumId, photoId }) => {
+    const isToggled = !!itemsRef.current.filter(v => v.id === photoId).length
 
     if (!isToggled) {
-      favorites.push(data)
+      itemsRef.current.push({ ...data?.photos })
+    } else {
+      itemsRef.current = itemsRef.current.filter(v => v.id !== photoId) || []
     }
 
-    if (isToggled && favorites.length) {
-      const newFavorites = favorites.filter(v => v.id !== id)
-      usersRef.current.favorites = newFavorites
+    usersRef.current.favorites[albumId] = {
+      ...data?.albums,
+      items: itemsRef.current.filter(v => v.albumId === albumId)
     }
 
-    if (favorites.length) {
-      setUsersData({
-        favorites: usersRef.current.favorites
-      })
+    const isItemsOnAlbum = !!itemsRef.current.filter(v => v.albumId === albumId).length
+
+    if (!isItemsOnAlbum) {
+      delete usersRef.current.favorites[albumId]
     }
+
+    setUsersData({
+      favorites: { ...usersRef.current.favorites }
+    })
   }, [])
 
   const value = useMemo(() => [usersData, setValue], [usersData, setValue])

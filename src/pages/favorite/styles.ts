@@ -5,14 +5,14 @@ import {
 
 export default (theme: Theme) => createStyles({
   root: {
-    padding: theme.spacing(12, 4),
+    padding: theme.spacing(7, 4),
   },
-  avatar: {
-    width: '300px',
-    height: '300px'
-  },
-  profile: {
-    paddingBottom: 50
+  rootEmptyItems: {
+    padding: theme.spacing(7, 4),
+    height: 450,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   spacingHorizontal: {
     paddingLeft: '16px',
@@ -26,15 +26,15 @@ export default (theme: Theme) => createStyles({
     alignItems: 'flex-start',
     borderRadius: '5px',
     textAlign: 'left',
-    background: '#f7f7f7',
+    background: 'none',
     position: 'relative',
-    boxShadow: 'rgba(0, 0, 0, 0.12) 0px 3px 9px -2px'
+    boxShadow: 'none'
   },
   icon: {
     padding: theme.spacing(2, 0),
   },
   title: {
-    padding: theme.spacing(2),
+    padding: '6px 16px 16px',
     textTransform: 'capitalize',
     display: 'block',
     width: '289px',
@@ -74,12 +74,16 @@ export default (theme: Theme) => createStyles({
     "& p": {
       paddingTop: '0px'
     },
-
   },
-  wishlist: {
-    position: 'absolute',
-    right: '15px',
-    top: '15px',
-    height: '24px',
-  }
+  gridItem: {
+    backgroundSize: 'cover !important',
+    borderRadius: '10px',
+    margin: '20px 0'
+  },
+  overline: {
+    padding: theme.spacing(0, 2),
+  },
+  gridTitle: {
+    paddingBottom: 25
+  },
 })

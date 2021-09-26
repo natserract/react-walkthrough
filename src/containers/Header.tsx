@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, makeStyles, Tooltip } from '@material-ui/core';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useUsersData } from '../hooks'
 import Badge from '@material-ui/core/Badge';
 
@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header: React.FC = (props) => {
   const classes = useStyles();
+  const history = useHistory()
   const [usersData,] = useUsersData()
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -29,9 +30,10 @@ const Header: React.FC = (props) => {
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
+    history.push('/favorite')
   };
 
-  const isEmpty = (data) => data.length === 0
+  const isEmpty = (data) => Object.values(data).length === 0
 
   useEffect(() => console.log('usersData new', usersData), [usersData])
 
