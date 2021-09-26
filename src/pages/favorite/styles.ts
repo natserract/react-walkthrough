@@ -37,7 +37,7 @@ export default (theme: Theme) => createStyles({
     padding: '6px 16px 16px',
     textTransform: 'capitalize',
     display: 'block',
-    width: '289px',
+    width: '489px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',

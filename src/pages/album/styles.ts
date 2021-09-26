@@ -41,5 +41,10 @@ export default (theme: Theme) => createStyles({
   btnSubmit: {
     maxWidth: 150,
     margin: '10px 0'
+  },
+  rootList: {
+    position: 'relative',
+    overflow: 'auto',
+    maxHeight: 300,
   }
 })

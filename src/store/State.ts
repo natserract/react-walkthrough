@@ -14,7 +14,10 @@ export type UsersState = {
         id: string;
         userId: string;
         albumId: string;
-        contents: string[]
+        contents: {
+          text: string,
+          id: string,
+        }[],
         createdDate?: Date
       }
     }

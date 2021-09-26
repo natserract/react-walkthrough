@@ -28,7 +28,9 @@ const useStyles = makeStyles(styles);
 const CommentsDialog: React.FC<Props> = (props) => {
   const classes = useStyles()
   const { stateLocation, photoId } = props
-  const [, , setCommentsValue] = useUsersData()
+
+  const [usersData, , setCommentsValue] = useUsersData()
+  const comments = usersData.users.comments[props.photoId]
 
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
@@ -41,15 +43,26 @@ const CommentsDialog: React.FC<Props> = (props) => {
     props.setOpenDialog(false);
   };
 
+  const resetInput = () => {
+    setFormInput({
+      'comment': null
+    });
+  }
+
   const handleSubmit = evt => {
     evt.preventDefault();
 
-    setCommentsValue({
-      input: formInput?.comment,
-      stateLocation,
-      photoId
-    })
+    if (formInput?.comment) {
+      setCommentsValue({
+        text: formInput?.comment,
+        stateLocation,
+        photoId
+      })
+
+      resetInput()
+    }
   };
+
 
   const handleInput = evt => {
     const name = evt.target.name;
@@ -69,27 +82,26 @@ const CommentsDialog: React.FC<Props> = (props) => {
       </AppBar>
 
       <Container className={classes.commentsContainer}>
-        <List>
-          <Divider />
-          <ListItem>
-            <ListItemText secondary="Titania" />
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemText secondary="Tethys" />
-          </ListItem>
-          <Divider />
+        <List className={classes.rootList}>
+          {comments && comments.contents.map(({ text }, index) => (
+            <React.Fragment key={`list-${index}`}>
+              <Divider />
+              <ListItem>
+                <ListItemText secondary={text} />
+              </ListItem>
+              <Divider />
+            </React.Fragment>
+          ))}
         </List>
 
         <AppBar position="fixed" color="transparent" className={classes.appBarComment}>
           <form onSubmit={handleSubmit}>
             <TextField
-              id="outlined-multiline-static"
               label="Add your comment here"
-              multiline
               rows={4}
+              multiline
               name="comment"
-              defaultValue={formInput.comment}
+              value={formInput.comment || ""}
               variant="outlined"
               className={classes.commentInput}
               onChange={handleInput}

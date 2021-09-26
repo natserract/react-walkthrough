@@ -1,5 +1,6 @@
 import React from 'react'
 import { AppBar, Toolbar, Typography, Container} from '@material-ui/core';
+import PanToolIcon from '@material-ui/icons/PanTool';
 
 const Footer = () => {
   return (
@@ -7,7 +8,7 @@ const Footer = () => {
       <Container>
         <Toolbar>
           <Typography variant="h5"color="inherit" align="center" display="block" style={{ width: '100%' }}>
-            Thanks for using <b>Up.</b>
+            Thanks for using <b>Up. <PanToolIcon /></b>
         </Typography>
         </Toolbar>
       </Container>

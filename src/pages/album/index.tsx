@@ -23,12 +23,14 @@ const Album: React.FC = () => {
   const classes = useStyles()
   const { state } = useLocation()
   const [, setToastData] = useToastData()
+
   const [usersData, setUsersData] = useUsersData()
+  const favorites = usersData.users.favorites[state.albumId]
 
   const [dataAlbum, setDataAlbum] = useState({})
   const [dataPhotos, setDataPhotos] = useState<any[]>([])
   const [openDialog, setOpenDialog] = useState(false);
-  
+
   const photoIdRef = useRef('')
 
   const fetchAlbum = useCallback(() => {
@@ -106,7 +108,7 @@ const Album: React.FC = () => {
                       className={classes.icon}
                       onClick={handleClickFavorite(photo?.id)}
                     >
-                      {usersData.users.favorites[state.albumId] && !!usersData.users.favorites[state.albumId].items.find(v => v.id === photo?.id) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                      {favorites && !!favorites.items.find(v => v.id === photo?.id) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                     </IconButton>
                   </>
                 }

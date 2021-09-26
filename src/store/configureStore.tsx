@@ -71,9 +71,9 @@ export const UsersProvider = ({ children }) => {
     })
   }, [usersData.users])
 
-  const setCommentsValue = useCallback(({ input, stateLocation, photoId }) => {
+  const setCommentsValue = useCallback(({ text, stateLocation, photoId }) => {
     commentsItemsRef.current.push({
-      input,
+      text,
       id: photoId
     })
 

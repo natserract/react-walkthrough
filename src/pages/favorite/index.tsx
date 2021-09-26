@@ -23,9 +23,9 @@ const Favorite = () => {
   return (
     <Container component="section" maxWidth="lg" className={classes.root}>
       <Grid container direction="column" className={classes.gridTitle}>
-        <Typography variant="overline">Collections</Typography>
+        <Typography variant="overline">Favorite</Typography>
         <Typography variant="h3" component="h2">
-          Favorite
+          Collections
         </Typography>
       </Grid>
 

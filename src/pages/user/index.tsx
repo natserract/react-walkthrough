@@ -88,10 +88,11 @@ const User: React.FC = () => {
       <Grid container>
         <Grid container direction="column" alignItems="flex-start">
           <div className={classes.spacingHorizontal}>
-            <Typography variant="overline" gutterBottom>Collections</Typography>
+            <Typography variant="overline" gutterBottom>Albums</Typography>
             <Typography variant="h4" gutterBottom component="h3">
-              Albums
+              Collections
             </Typography>
+            <br />
           </div>
         </Grid>
 
