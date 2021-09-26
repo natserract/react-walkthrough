@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, makeStyles, Tooltip } from '@material-ui/core';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import Button from '@material-ui/core/Button';
@@ -26,6 +26,7 @@ const Header: React.FC = (props) => {
   const [usersData,] = useUsersData()
 
   const [anchorEl, setAnchorEl] = useState(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const open = Boolean(anchorEl);
 
   const handleMenu = (event) => {

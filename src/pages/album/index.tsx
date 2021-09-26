@@ -55,8 +55,6 @@ const Album: React.FC = () => {
 
   useEffect(fetchAlbum, [])
 
-  useEffect(() => console.log('data albums', dataAlbum, dataPhotos), [dataAlbum, dataPhotos])
-
   const handleClickComments = useCallback((photoId: string) => () => {
     setOpenDialog(true)
     photoIdRef.current = photoId
@@ -75,10 +73,6 @@ const Album: React.FC = () => {
       photoId
     })
   }, [state, dataPhotos, dataAlbum, setUsersData])
-
-  useEffect(() => {
-    console.log('usersData', usersData)
-  }, [usersData])
 
   return (
     <Container component="section" maxWidth="lg" className={classes.root}>

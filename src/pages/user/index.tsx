@@ -48,10 +48,6 @@ const User: React.FC = () => {
 
   useEffect(fetchAlbum, [])
 
-  useEffect(() => {
-    console.log('dataAlbums', dataAlbums)
-  }, [dataAlbums])
-
   const handleRouteChange = (to: string, state = {}) => {
     history.push(to, { ...state })
   }

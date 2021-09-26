@@ -56,10 +56,6 @@ const Home: React.FC = () => {
     history.push(to, { ...state })
   }
 
-  useEffect(() => {
-    console.log('data', data)
-  }, [data])
-
   if (loading) return <FullscreenLoading />
 
   return (
