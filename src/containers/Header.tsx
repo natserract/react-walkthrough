@@ -35,8 +35,6 @@ const Header: React.FC = (props) => {
 
   const isEmpty = (data) => Object.values(data).length === 0
 
-  useEffect(() => console.log('usersData new', usersData), [usersData])
-
   return (
     <AppBar position="static" color="transparent">
       <Toolbar>
@@ -54,8 +52,8 @@ const Header: React.FC = (props) => {
               style={{ textTransform: 'capitalize' }}
             >
               <Badge 
-                badgeContent={usersData.favorites.length} 
-                invisible={isEmpty(usersData.favorites)} 
+                badgeContent={usersData.users.favorites.length} 
+                invisible={isEmpty(usersData.users.favorites)} 
                 color="secondary" 
                 variant="dot"
               >

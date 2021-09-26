@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { useLocation } from 'react-router'
 import { getAll, get } from '../../api/API'
 import { useToastData, useUsersData } from '../../hooks'
@@ -28,6 +28,8 @@ const Album: React.FC = () => {
   const [dataAlbum, setDataAlbum] = useState({})
   const [dataPhotos, setDataPhotos] = useState<any[]>([])
   const [openDialog, setOpenDialog] = useState(false);
+  
+  const photoIdRef = useRef('')
 
   const fetchAlbum = useCallback(() => {
     const { albumId } = state
@@ -53,8 +55,9 @@ const Album: React.FC = () => {
 
   useEffect(() => console.log('data albums', dataAlbum, dataPhotos), [dataAlbum, dataPhotos])
 
-  const handleClickComments = useCallback(() => {
+  const handleClickComments = useCallback((photoId: string) => () => {
     setOpenDialog(true)
+    photoIdRef.current = photoId
   }, [])
 
   const handleClickFavorite = useCallback((photoId: string) => () => {
@@ -95,7 +98,7 @@ const Album: React.FC = () => {
                 position='bottom'
                 actionIcon={
                   <>
-                    <Button color='inherit' className={classes.btnComment} onClick={handleClickComments}>
+                    <Button color='inherit' className={classes.btnComment} onClick={handleClickComments(photo?.id)}>
                       Comments
                     </Button>
                     <IconButton
@@ -103,7 +106,7 @@ const Album: React.FC = () => {
                       className={classes.icon}
                       onClick={handleClickFavorite(photo?.id)}
                     >
-                      {usersData.favorites[state.albumId] && !!usersData.favorites[state.albumId].items.find(v => v.id === photo?.id) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                      {usersData.users.favorites[state.albumId] && !!usersData.users.favorites[state.albumId].items.find(v => v.id === photo?.id) ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                     </IconButton>
                   </>
                 }
@@ -117,6 +120,8 @@ const Album: React.FC = () => {
       <CommentsDialog
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}
+        stateLocation={state}
+        photoId={photoIdRef.current}
       />
     </Container>
   )

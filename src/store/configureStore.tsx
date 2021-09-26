@@ -24,44 +24,77 @@ export const ToastDataProvider = ({ children }) => {
   return createElement(ToastDataCtx.Provider, { value }, children)
 }
 
-export const useUsersData = () => useContext(UsersCtx) as [UsersState, Function]
+export const useUsersData = () => useContext(UsersCtx) as [UsersState, Function, Function]
 
 export const UsersProvider = ({ children }) => {
   const [usersData, setUsersData] = useState<UsersState>({
-    favorites: {}
+    users: {
+      favorites: {},
+      comments: {}
+    }
   });
 
   const usersRef = useRef<UsersState>({
-    favorites: {}
+    users: {
+      favorites: {},
+      comments: {}
+    }
   })
-  const itemsRef = useRef<any[]>([])
+  const favoriteItemsRef = useRef<any[]>([])
+  const commentsItemsRef = useRef<any[]>([])
 
-  const setValue = useCallback(({ data, albumId, photoId }) => {
-    const isToggled = !!itemsRef.current.filter(v => v.id === photoId).length
+  const setFavoriteValue = useCallback(({ data, albumId, photoId }) => {
+    const isToggled = !!favoriteItemsRef.current.filter(v => v.id === photoId).length
 
     if (!isToggled) {
-      itemsRef.current.push({ ...data?.photos })
+      favoriteItemsRef.current.push({ ...data?.photos })
     } else {
-      itemsRef.current = itemsRef.current.filter(v => v.id !== photoId) || []
+      favoriteItemsRef.current = favoriteItemsRef.current.filter(v => v.id !== photoId) || []
     }
 
-    usersRef.current.favorites[albumId] = {
+    usersRef.current.users.favorites[albumId] = {
       ...data?.albums,
-      items: itemsRef.current.filter(v => v.albumId === albumId)
+      items: favoriteItemsRef.current.filter(v => v.albumId === albumId)
     }
 
-    const isItemsOnAlbum = !!itemsRef.current.filter(v => v.albumId === albumId).length
+    const isItemsOnAlbum = !!favoriteItemsRef.current.filter(v => v.albumId === albumId).length
 
     if (!isItemsOnAlbum) {
-      delete usersRef.current.favorites[albumId]
+      delete usersRef.current.users.favorites[albumId]
     }
 
     setUsersData({
-      favorites: { ...usersRef.current.favorites }
+      users: {
+        ...usersData.users,
+        favorites: { ...usersRef.current.users.favorites }
+      },
     })
-  }, [])
+  }, [usersData.users])
 
-  const value = useMemo(() => [usersData, setValue], [usersData, setValue])
+  const setCommentsValue = useCallback(({ input, stateLocation, photoId }) => {
+    commentsItemsRef.current.push({
+      input,
+      id: photoId
+    })
+
+    const { userId, albumId } = stateLocation
+
+    usersRef.current.users.comments[photoId] = {
+      id: photoId,
+      userId,
+      albumId,
+      contents: commentsItemsRef.current.filter(v => v.id === photoId),
+    }
+
+    setUsersData({
+      users: {
+        ...usersData.users,
+        comments: { ...usersRef.current.users.comments }
+      },
+    })
+  }, [usersData.users])
+
+  const value = useMemo(() => [usersData, setFavoriteValue, setCommentsValue], [usersData, setFavoriteValue, setCommentsValue])
 
   return createElement(UsersCtx.Provider, { value }, children)
 }

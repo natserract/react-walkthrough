@@ -12,11 +12,7 @@ const Favorite = () => {
   const classes = useStyles()
   const [usersData] = useUsersData()
 
-  useEffect(() => {
-    console.log('Fac', Object.values(usersData?.favorites))
-  }, [usersData])
-
-  if (!Object.values(usersData?.favorites).length) return (
+  if (!Object.values(usersData.users?.favorites).length) return (
     <Container component="section" maxWidth="lg" className={classes.rootEmptyItems}>
       <Typography variant="h4" component="h3" align="center">
         No Favorite Items Added
@@ -34,7 +30,7 @@ const Favorite = () => {
       </Grid>
 
       <Grid container spacing={2} alignItems="stretch" className={classes.spacingHorizontal}>
-        {Object.values(usersData?.favorites).map(({ title: albumTitle, items }) => {
+        {Object.values(usersData.users?.favorites).map(({ title: albumTitle, items }) => {
           return items.map(({ albumId, title: photoTitle, url }, index) => (
             <Grid item xs={12} key={`list-${albumId}-${index}`}
               className={classes.gridItem}
