@@ -46,5 +46,10 @@ export default (theme: Theme) => createStyles({
     position: 'relative',
     overflow: 'auto',
     maxHeight: 300,
+  },
+  imgListItem: {
+    "& .MuiImageListItem-item": {
+      borderRadius: 7
+    }
   }
 })

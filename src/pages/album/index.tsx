@@ -92,7 +92,7 @@ const Album: React.FC = () => {
       <div>
         <ImageList gap={10}>
           {dataPhotos.map((photo, index) => (
-            <ImageListItem key={index}>
+            <ImageListItem key={index} className={classes.imgListItem}>
               <img src={photo.url} alt={photo?.title} />
 
               <ImageListItemBar

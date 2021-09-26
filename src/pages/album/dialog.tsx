@@ -105,6 +105,7 @@ const CommentsDialog: React.FC<Props> = (props) => {
               variant="outlined"
               className={classes.commentInput}
               onChange={handleInput}
+              autoFocus
             />
             <Button type="submit" variant="contained" color="primary" className={classes.btnSubmit}>Submit</Button>
           </form>
