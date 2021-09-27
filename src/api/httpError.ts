@@ -22,18 +22,18 @@ export const handleAPIError = (
     case 400:
       errorHandler.badRequest(response.data.error as ErrorDetails)
       break;
-    case 404:
-      errorHandler.pageNotFound(response.data.error as ErrorDetails);
-      break;
     case 401: {
-      errorHandler.pageNotFound(response.data.error as ErrorDetails);
+      errorHandler.unauthenticated(response.data.error as ErrorDetails);
       break;
     }
     case 403:
+      errorHandler.permissionDenied(response.data.error as ErrorDetails);
+      break;
+    case 404:
       errorHandler.pageNotFound(response.data.error as ErrorDetails);
       break;
     case 500:
-      errorHandler.pageNotFound(response.data.error as ErrorDetails);
+      errorHandler.serverError(response.data.error as ErrorDetails);
       break;
     default:
       errorHandler.unknownError(response.data.error as ErrorDetails)
