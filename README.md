@@ -6,7 +6,6 @@
 - [Dispatch Context from useCallback](https://github.com/natserract/react-walkthrough/blob/main/src/store/configureStore.tsx) using dispatch without reducer and prevent the re-creation of a function (small-apps).
 - [useMemo inside Context](https://github.com/natserract/react-walkthrough/blob/main/src/store/configureStore.tsx#L97) prevent re-render the child tree if all useMemo inputs are the same.
 - [Multiple requests using Axios](https://github.com/natserract/react-walkthrough/blob/main/src/pages/home/index.tsx#L36)  use `Axios.all()` to make multiple HTTP requests in parallel.
-## Create React App
 
 <img alt="Logo" align="right" src="https://create-react-app.dev/img/logo.svg" width="20%" />
 
